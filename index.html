@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏏 Cricket Scorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- ============ TOP BAR ============ -->
+    <div class="topbar">
+      <div class="brand"><span class="ball-ico">🏏</span> Cricket Scorer</div>
+      <button id="rosterBtn" class="ghost-btn">👥 Players</button>
+    </div>
+
+    <!-- ============ HERO SCOREBOARD ============ -->
+    <header class="hero">
+      <div class="hero-glow"></div>
+      <div class="hero-top">
+        <div class="team">
+          <span id="teamName" class="team-name" contenteditable="true" spellcheck="false">Team A</span>
+          <span class="innings">1st Innings</span>
+        </div>
+        <div class="rr-pill">
+          <span class="rr-label">CRR</span>
+          <span id="crr" class="rr-value">0.00</span>
+        </div>
+      </div>
+
+      <div class="hero-score">
+        <div class="score-big">
+          <span id="totalRuns" class="num">0</span><span class="slash">/</span><span id="wickets" class="num wk">0</span>
+        </div>
+        <div class="overs-box">
+          <span id="overs" class="num overs-val">0.0</span>
+          <span class="overs-label">Overs</span>
+        </div>
+      </div>
+
+      <div class="hero-strip">
+        <div class="strip-item"><span class="si-label">Extras</span><span id="extras" class="si-val num">0</span></div>
+        <div class="strip-divider"></div>
+        <div class="strip-item"><span class="si-label">This Over</span><span id="thisOverRuns" class="si-val num">0</span></div>
+        <div class="strip-divider"></div>
+        <div class="strip-item"><span class="si-label">Run Rate</span><span id="crr2" class="si-val num">0.00</span></div>
+      </div>
+    </header>
+
+    <!-- ============ BATSMEN ============ -->
+    <section class="card batsmen-card">
+      <div class="card-head">
+        <span class="ch-title">Batting</span>
+        <div class="bat-cols">
+          <span>R</span><span>B</span><span>4s</span><span>6s</span><span>SR</span>
+        </div>
+      </div>
+      <div id="strikerRow" class="bat-row"></div>
+      <div id="nonStrikerRow" class="bat-row"></div>
+      <div class="partnership">
+        <span class="p-label">🤝 Partnership</span>
+        <span id="partnership" class="p-val num">0 (0)</span>
+      </div>
+    </section>
+
+    <!-- ============ THIS OVER ============ -->
+    <section class="card thisover-card">
+      <div class="thisover-head">
+        <span class="ch-title">This Over</span>
+        <span id="bowlerBalls" class="legal-count num">0/6</span>
+      </div>
+      <div id="thisOver" class="ball-chips"></div>
+    </section>
+
+    <!-- ============ CONTROLS ============ -->
+    <section class="card controls-card">
+      <div class="ctrl-label">Runs</div>
+      <div class="run-grid">
+        <button class="run-btn dot" data-run="0">0</button>
+        <button class="run-btn" data-run="1">1</button>
+        <button class="run-btn" data-run="2">2</button>
+        <button class="run-btn" data-run="3">3</button>
+        <button class="run-btn four" data-run="4">4</button>
+        <button class="run-btn six" data-run="6">6</button>
+      </div>
+      <div class="ctrl-label">Extras</div>
+      <div class="extra-grid">
+        <button class="extra-btn" data-extra="wide">Wide</button>
+        <button class="extra-btn" data-extra="noball">No Ball</button>
+        <button class="extra-btn" data-extra="bye">Bye</button>
+        <button class="extra-btn" data-extra="legbye">Leg Bye</button>
+      </div>
+      <div class="action-grid">
+        <button id="wicketBtn" class="wicket-btn">🏏 Wicket</button>
+        <button id="undoBtn" class="undo-btn">↩ Undo</button>
+        <button id="resetBtn" class="reset-btn">⟳ New</button>
+      </div>
+    </section>
+
+    <!-- ============ FALL OF WICKETS ============ -->
+    <section class="card fow-card">
+      <div class="card-head simple">
+        <span class="ch-title">🪦 Fall of Wickets</span>
+      </div>
+      <div id="fowList" class="fow-list"></div>
+    </section>
+
+    <!-- ============ OVER SUMMARY ============ -->
+    <section class="card summary-card">
+      <div class="card-head simple"><span class="ch-title">Over Summary</span></div>
+      <div id="overSummary" class="over-summary"></div>
+    </section>
+
+    <footer class="foot">Auto-saved on your device · refresh-safe</footer>
+  </div>
+
+  <!-- ============ ROSTER MODAL ============ -->
+  <div id="rosterModal" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2>Players</h2>
+        <button id="closeRoster" class="ghost-btn dark">✕</button>
+      </div>
+      <p class="modal-hint">Tap a name to edit it.</p>
+      <div id="rosterList" class="roster-list"></div>
+    </div>
+  </div>
+
+  <!-- ============ EXTRA-RUNS MODAL ============ -->
+  <div id="extraModal" class="modal hidden">
+    <div class="modal-box small">
+      <div class="modal-head">
+        <h2 id="extraTitle">Runs</h2>
+        <button id="closeExtra" class="ghost-btn dark">✕</button>
+      </div>
+      <p class="modal-hint" id="extraHint"></p>
+      <div class="run-grid" id="extraRunGrid"></div>
+    </div>
+  </div>
+
+  <!-- ============ WICKET MODAL ============ -->
+  <div id="wicketModal" class="modal hidden">
+    <div class="modal-box small">
+      <div class="modal-head">
+        <h2>🏏 Wicket!</h2>
+        <button id="closeWicket" class="ghost-btn dark">✕</button>
+      </div>
+      <p class="modal-hint">Who is the new batsman?</p>
+      <div id="newBatsmanList" class="roster-list"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
