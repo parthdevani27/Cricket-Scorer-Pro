@@ -54,7 +54,8 @@ window.Analysis = (function () {
       // 1st innings: momentum from run rate vs a par rate for the format
       const par = m.overs <= 5 ? 9 : m.overs <= 10 ? 8.5 : m.overs <= 20 ? 8 : 6;
       const crr = Store.crr();
-      const wktFactor = (10 - i.wickets) / 10;
+      const maxW = i.bat.length - 1;
+      const wktFactor = (maxW - i.wickets) / maxW;
       pBat = sigmoid((crr - par) * 0.25) * (0.6 + 0.4 * wktFactor);
       pBat = Math.min(0.85, Math.max(0.15, pBat));
     } else {
@@ -67,7 +68,7 @@ window.Analysis = (function () {
       } else {
         const rrr = needed / (ballsLeft / BPO);
         const crr = Store.crr();
-        const wktsLeft = 10 - i.wickets;
+        const wktsLeft = (i.bat.length - 1) - i.wickets;
         const x = (crr - rrr) * 0.55 + (wktsLeft - 5) * 0.18 - (rrr - 8) * 0.04;
         pBat = Math.min(0.97, Math.max(0.03, sigmoid(x)));
       }

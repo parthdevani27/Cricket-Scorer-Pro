@@ -34,6 +34,10 @@
           </div>
           <select class="ipl-select" data-team="0"></select>
           <div class="color-row" data-team="0"></div>
+          <div class="size-row">
+            <span class="size-label">Players</span>
+            <input class="ts-size" data-team="0" type="number" min="2" max="11" />
+          </div>
           <button class="ts-players-btn" data-team="0">👥 Edit Players</button>
         </div>
 
@@ -46,6 +50,10 @@
           </div>
           <select class="ipl-select" data-team="1"></select>
           <div class="color-row" data-team="1"></div>
+          <div class="size-row">
+            <span class="size-label">Players</span>
+            <input class="ts-size" data-team="1" type="number" min="2" max="11" />
+          </div>
           <button class="ts-players-btn" data-team="1">👥 Edit Players</button>
         </div>
       </div>
@@ -114,6 +122,7 @@
         <div id="matchTitle" class="brand small">Innings 1</div>
         <div class="top-actions">
           <button id="analysisBtn" class="ghost-btn">📊 Analysis</button>
+          <button id="exitMatchBtn" class="ghost-btn danger">🚪 Exit</button>
           <button id="soundToggle3" class="ghost-btn">🔊</button>
         </div>
       </div>

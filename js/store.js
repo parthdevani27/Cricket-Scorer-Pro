@@ -10,7 +10,7 @@ window.Store = (function () {
   function freshTeam(name, color) {
     const players = [];
     for (let i = 0; i < 11; i++) players.push({ name: "" });
-    return { name, color, players, captain: 0, wk: 1 };
+    return { name, color, players, captain: 0, wk: 1, size: 11 };
   }
 
   function freshMatch() {
@@ -32,14 +32,14 @@ window.Store = (function () {
   }
 
   function freshInnings(battingTeam, bowlingTeam) {
+    const batSize = (match && match.teams[battingTeam] && match.teams[battingTeam].size) || 11;
+    const bowlSize = (match && match.teams[bowlingTeam] && match.teams[bowlingTeam].size) || 11;
     const bat = [];
     const bowl = [];
-    for (let i = 0; i < 11; i++) {
-      bat.push({ runs: 0, balls: 0, fours: 0, sixes: 0, status: "yet", out: "" });
-      bowl.push({ balls: 0, runs: 0, wickets: 0, maidens: 0, overRuns: 0, used: false });
-    }
+    for (let i = 0; i < batSize; i++) bat.push({ runs: 0, balls: 0, fours: 0, sixes: 0, status: "yet", out: "" });
+    for (let i = 0; i < bowlSize; i++) bowl.push({ balls: 0, runs: 0, wickets: 0, maidens: 0, overRuns: 0, used: false });
     bat[0].status = "batting";
-    bat[1].status = "batting";
+    if (batSize > 1) bat[1].status = "batting";
     return {
       battingTeam, bowlingTeam,
       total: 0, wickets: 0, legalBalls: 0, extras: 0,
@@ -60,7 +60,12 @@ window.Store = (function () {
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (s.teams) s.teams.forEach((t) => { if (!t.size) t.size = (t.players ? t.players.length : 11); });
+        if (!s.settings) s.settings = { sound: true };
+        return s;
+      }
     } catch (e) { /* ignore */ }
     return freshMatch();
   }

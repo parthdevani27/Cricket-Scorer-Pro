@@ -33,12 +33,17 @@ window.Setup = (function () {
     if (!Data.OVER_PRESETS.includes(Store.match.overs)) custom.value = Store.match.overs;
   }
 
+  /* ---------- team size ---------- */
+  function renderSizes() {
+    document.querySelectorAll(".ts-size").forEach((inp) => { inp.value = Store.match.teams[+inp.dataset.team].size; });
+  }
+
   /* ---------- players editor ---------- */
   function openPlayers(team) {
     const t = Store.match.teams[team];
-    $("playersModalTitle").textContent = t.name + " — Players";
+    $("playersModalTitle").textContent = t.name + " — Players (" + t.size + " a side)";
     const list = $("playersList");
-    list.innerHTML = t.players.map((p, idx) => `
+    list.innerHTML = t.players.slice(0, t.size).map((p, idx) => `
       <div class="pe-item">
         <span class="rnum">${idx + 1}</span>
         <input class="pe-name" data-team="${team}" data-idx="${idx}" maxlength="18"
@@ -79,6 +84,7 @@ window.Setup = (function () {
     const t = Store.match.teams[team];
     t.name = ipl.team_name;
     t.color = Data.brighten(ipl.color_code || "#2ee6a6");
+    t.size = ipl.playing_11.length;
     ipl.playing_11.forEach((nm, k) => { if (t.players[k]) t.players[k].name = nm; });
     const ci = ipl.playing_11.indexOf(ipl.captain);
     const wi = ipl.playing_11.indexOf(ipl.wicketkeeper);
@@ -88,6 +94,7 @@ window.Setup = (function () {
     const inp = document.querySelector('.ts-name[data-team="' + team + '"]');
     if (inp) inp.value = t.name;
     renderColors();
+    renderSizes();
   }
 
   /* ---------- finalize ---------- */
@@ -112,7 +119,23 @@ window.Setup = (function () {
 
     renderColors();
     renderOvers();
+    renderSizes();
     renderIplOptions();
+
+    // team size (players per side)
+    document.querySelectorAll(".ts-size").forEach((inp) =>
+      inp.addEventListener("change", (e) => {
+        const tm = +e.target.dataset.team;
+        let v = parseInt(e.target.value, 10);
+        if (isNaN(v)) v = 11;
+        v = Math.min(11, Math.max(2, v));
+        const t = Store.match.teams[tm];
+        t.size = v;
+        if (t.captain >= v) t.captain = 0;
+        if (t.wk >= v) t.wk = v > 1 ? 1 : 0;
+        e.target.value = v;
+        Store.save();
+      }));
 
     // IPL quick-pick
     document.querySelectorAll(".ipl-select").forEach((sel) =>
@@ -155,7 +178,7 @@ window.Setup = (function () {
     });
   }
 
-  function refresh() { renderColors(); renderOvers(); }
+  function refresh() { renderColors(); renderOvers(); renderSizes(); }
 
   return { init, refresh, openPlayers };
 })();

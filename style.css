@@ -57,6 +57,8 @@ body {
 .ghost-btn:hover { background: var(--card-3); }
 .ghost-btn:active { transform: scale(.95); }
 .ghost-btn.dark { background: transparent; }
+.ghost-btn.danger { background: rgba(251,93,122,.14); color: var(--rose); border-color: rgba(251,93,122,.3); }
+.ghost-btn.danger:hover { background: rgba(251,93,122,.24); }
 .ghost-btn.big { padding: 13px; font-size: .95rem; }
 
 button { cursor: pointer; font-family: inherit; border: none; transition: transform .06s, filter .15s, background .15s; }
@@ -86,6 +88,10 @@ button:disabled { opacity: .4; cursor: not-allowed; }
 .color-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 12px; }
 .swatch { width: 100%; aspect-ratio: 1; border-radius: 7px; border: 2px solid transparent; }
 .swatch.sel { border-color: #fff; transform: scale(1.12); box-shadow: 0 0 0 2px #0006; }
+.size-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 8px; }
+.size-label { font-size: .72rem; color: var(--muted); font-weight: 700; }
+.ts-size { width: 64px; background: var(--card-2); border: 1px solid var(--line-2); border-radius: 9px; color: var(--text); font-family: "Oswald"; font-weight: 600; font-size: 1rem; padding: 7px 8px; text-align: center; }
+.ts-size:focus { outline: none; border-color: var(--accent); }
 .ts-players-btn { width: 100%; background: var(--card-2); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 10px; font-weight: 700; font-size: .82rem; }
 .ts-players-btn:hover { background: var(--card-3); }
 .vs-badge { font-weight: 900; color: var(--muted); font-size: .85rem; }

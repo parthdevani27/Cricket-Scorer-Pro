@@ -38,7 +38,7 @@ window.Engine = (function () {
   function eligibleBowlers() {
     const i = inn();
     const out = [];
-    for (let k = 0; k < 11; k++) if (k !== i.prevBowler) out.push(k);
+    for (let k = 0; k < i.bowl.length; k++) if (k !== i.prevBowler) out.push(k);
     return out;
   }
   function setBowler(idx) {
@@ -203,7 +203,7 @@ window.Engine = (function () {
     pushChip(i, "W", "w", 0);
     events.push({ type: "wicket", batterIdx: i.striker });
 
-    const allOut = i.wickets >= 10 || newIdx == null;
+    const allOut = i.wickets >= i.bat.length - 1 || newIdx == null;
     if (allOut) {
       i.inningsOver = true;
       events.push({ type: "inningsOver", reason: "allout" });
@@ -245,7 +245,7 @@ window.Engine = (function () {
   function availableBatsmen() {
     const i = inn();
     const out = [];
-    for (let k = 0; k < 11; k++) {
+    for (let k = 0; k < i.bat.length; k++) {
       if (k === i.striker || k === i.nonStriker) continue;
       if (i.bat[k].status === "yet" || i.bat[k].status === "retired") out.push(k);
     }
@@ -261,7 +261,7 @@ window.Engine = (function () {
     if (b.total >= m.target) {
       // chasing team won
       winner = b.battingTeam; loser = a.battingTeam;
-      const wktsLeft = 10 - b.wickets;
+      const wktsLeft = (b.bat.length - 1) - b.wickets;
       const ballsLeft = m.overs * BPO - b.legalBalls;
       margin = wktsLeft + " wicket" + (wktsLeft === 1 ? "" : "s")
         + " (" + ballsLeft + " ball" + (ballsLeft === 1 ? "" : "s") + " left)";

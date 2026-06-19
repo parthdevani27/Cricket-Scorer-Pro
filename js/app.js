@@ -85,7 +85,7 @@ window.App = (function () {
     $("wicketTypes").innerHTML = Data.WICKET_TYPES.map((w) =>
       `<button class="wtype${w === "Bowled" ? " sel" : ""}" data-how="${w}">${w}</button>`).join("");
     const avail = Engine.availableBatsmen();
-    const lastMan = i.wickets >= 9 || avail.length === 0;
+    const lastMan = avail.length === 0;
     $("newBatHint").style.display = lastMan ? "none" : "";
     $("newBatsmanList").style.display = lastMan ? "none" : "";
 
@@ -241,15 +241,25 @@ window.App = (function () {
     syncSoundIcons();
   }
 
-  /* ============ NEW MATCH ============ */
-  function newMatch() {
-    if (!confirm("Start a brand new match? Current match will be cleared.")) return;
+  /* ============ NEW / EXIT MATCH ============ */
+  function toFreshSetup() {
     FX.stopParty();
     Store.reset();
     Setup.refresh();
     document.querySelectorAll(".ts-name").forEach((inp) => { inp.value = Store.match.teams[+inp.dataset.team].name; });
     syncSoundIcons();
     UI.showScreen("setup");
+  }
+  function newMatch() {
+    if (!confirm("Start a brand new match? Current match will be cleared.")) return;
+    toFreshSetup();
+  }
+  // exit mid-match — double confirm so it can't happen by accident
+  function exitMatch() {
+    if (!confirm("⚠️ Exit this match and start fresh?\n\nThe current match will be permanently deleted.")) return;
+    if (!confirm("Are you absolutely sure?\n\nThis cannot be undone.")) return;
+    toFreshSetup();
+    UI.toast("Match exited — set up a new one");
   }
 
   /* ============ WIRING ============ */
@@ -304,8 +314,9 @@ window.App = (function () {
       renderAnalysis();
     });
 
-    // result
+    // result / exit
     $("newMatchBtn").addEventListener("click", newMatch);
+    $("exitMatchBtn").addEventListener("click", exitMatch);
 
     // sound toggles
     ["soundToggle", "soundToggle2", "soundToggle3"].forEach((id) => { const b = $(id); if (b) b.addEventListener("click", toggleSound); });
