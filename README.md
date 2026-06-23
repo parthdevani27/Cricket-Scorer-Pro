@@ -1,4 +1,4 @@
-# 🏏 Cricket Scorer Pro
+# [🏏 Cricket Scorer Pro](https://parthdevani27.github.io/Cricket-Scorer-Pro/)
 
 A simple, good-looking cricket scoring app that runs right in your browser.
 No installs, no sign-up, no server — just open the file and start scoring.
