@@ -6,6 +6,8 @@ No installs, no sign-up, no server — just open the file and start scoring.
 Built with plain **HTML, CSS, and JavaScript**. Your match is saved on your
 device, so a refresh never loses the score.
 
+Web URL: https://parthdevani27.github.io/Cricket-Scorer-Pro/
+
 ---
 
 ## 📸 Screenshots
@@ -47,6 +49,7 @@ device, so a refresh never loses the score.
 
 1. Download or clone this project.
 2. Open **`index.html`** in any modern browser (Chrome, Edge, Firefox).
+3. OR open at https://parthdevani27.github.io/Cricket-Scorer-Pro/
 
 That's it. No build step.
 
